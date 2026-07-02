@@ -593,7 +593,7 @@ export default function BookingForm({
 
           {step === 4 && (
             <div>
-              <h3 className="font-serif text-[28px] font-normal text-ink mb-8">
+              <h3 className="font-serif text-[28px] p-2 font-normal text-ink mb-8">
                 Confirm your booking
               </h3>
               <div className="bg-bg2 rounded-16 p-7 border border-bd mb-6">
@@ -674,7 +674,7 @@ export default function BookingForm({
                 </button>
               </div>
               <button
-                className="w-full h-13 bg-accent text-white rounded-full text-[15px] font-semibold mt-9 hover:bg-accent2 hover:-translate-y-px hover:shadow-[0_6px_20px_rgba(61,89,72,0.3)] transition-all cursor-pointer"
+                className="w-full h-13 py-4 bg-accent text-white rounded-full text-[15px] font-semibold mt-9 hover:bg-accent2 hover:-translate-y-px hover:shadow-[0_6px_20px_rgba(61,89,72,0.3)] transition-all cursor-pointer"
                 onClick={handleSubmit}
               >
                 Confirm Booking Request

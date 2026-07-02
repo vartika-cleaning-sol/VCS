@@ -2,7 +2,7 @@
 
 const reasons = [
   {
-    icon: "🛡",
+    icon: "🛡️",
     title: "Verified Professionals",
     desc: "Every technician is background-verified, uniformed, and certified through our training programme.",
   },
@@ -17,12 +17,12 @@ const reasons = [
     desc: "No hidden charges. Get a clear quote before we begin. What we say is what you pay.",
   },
   {
-    icon: "⏱",
+    icon: "⌚",
     title: "On-Time Service",
     desc: "We respect your time. Our team arrives within the confirmed window, every single visit.",
   },
   {
-    icon: "✦",
+    icon: "🌟",
     title: "Satisfaction Guarantee",
     desc: "Not satisfied? We re-clean the affected area within 24 hours — completely free of charge.",
   },
