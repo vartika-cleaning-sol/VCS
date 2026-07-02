@@ -27,6 +27,9 @@ export const metadata: Metadata = {
   title: "Vartika Cleaning Solutions — Spaces Worth Living In",
   description:
     "Premium cleaning and restoration services for modern homes and businesses across Delhi NCR.",
+  icons: {
+    icon: "/newlogogreen.svg",
+  },
 };
 
 export default function RootLayout({
