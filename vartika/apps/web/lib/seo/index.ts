@@ -3,7 +3,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import type { SeoSettingsRow, ServiceSeoRow, LocationSeoRow, FaqItem } from "@/lib/types/seo";
 
 const SITE_NAME = "Vartika Cleaning Solutions";
-const SITE_URL = "https://vartikacleaning.com";
+const SITE_URL = "https://www.vartikacleaningsolutions.in";
 const DEFAULT_OG_IMAGE = "/og-image.jpg";
 
 interface BuildMetadataOptions {
