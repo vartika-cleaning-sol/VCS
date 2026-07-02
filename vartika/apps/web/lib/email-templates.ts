@@ -11,7 +11,7 @@ interface BookingData {
   address?: string | null;
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vcs-lemon.vercel.app/";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vartikacleaningsolutions.in/";
 const LOGO_URL = `${SITE_URL}/newlogogreen.svg`;
 
 function wrapLayout(body: string) {
