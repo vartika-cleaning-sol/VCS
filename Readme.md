@@ -87,7 +87,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### Admin Login
 
-Navigate to `/admin/login` and sign in with a Supabase Auth user. For development, use the dev login at `/api/dev-login`.
+Navigate to `/admin/login` and sign in with a Supabase Auth user.
 
 ## Project Structure
 

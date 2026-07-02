@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getLocalBookings, updateLocalBooking } from "@/lib/local-bookings";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { WA_TEMPLATES } from "@/lib/constants/messages";
 
@@ -81,7 +80,6 @@ interface CardBooking {
   admin_notes?: string;
   created_at: string;
   updated_at: string;
-  _local?: boolean;
 }
 
 export default function AdminBookingsPage() {
@@ -102,15 +100,10 @@ export default function AdminBookingsPage() {
         setServices(svcRows.map((s: { slug: string; name: string }) => ({ slug: s.slug, name: s.name })));
         if (bookingsRes.data) {
           setBookings(bookingsRes.data);
-        } else {
-          const local = getLocalBookings();
-          setBookings(local.map((b) => ({ ...b, _local: true })));
         }
         setLoading(false);
       })
       .catch(() => {
-        const local = getLocalBookings();
-        setBookings(local.map((b) => ({ ...b, _local: true })));
         setLoading(false);
       });
   }, []);
@@ -141,7 +134,6 @@ export default function AdminBookingsPage() {
   );
 
   const updateStatus = async (id: string, status: string) => {
-    updateLocalBooking(id, { status });
     const res = await fetch("/api/bookings", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -228,14 +220,6 @@ export default function AdminBookingsPage() {
               {/* Avatar */}
               <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent2 flex items-center justify-center text-xs font-bold text-white shrink-0">
                 {getInitials(booking.customer_name)}
-                {booking._local && (
-                  <span
-                    className="absolute -top-1 -right-1 text-[9px]"
-                    title="Using local storage (no Supabase)"
-                  >
-                    🔧
-                  </span>
-                )}
               </div>
 
               {/* Info */}
@@ -309,15 +293,11 @@ export default function AdminBookingsPage() {
                         setBookings((prev) =>
                           prev.map((b) => (b.id === booking.id ? { ...b, status: "contacted" } : b))
                         );
-                        if (!booking._local) {
-                          fetch("/api/bookings", {
-                            method: "PATCH",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ id: booking.id, status: "contacted" }),
-                          });
-                        } else {
-                          updateLocalBooking(booking.id, { status: "contacted" });
-                        }
+                        fetch("/api/bookings", {
+                          method: "PATCH",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ id: booking.id, status: "contacted" }),
+                        });
                         const svc = getServiceName(booking.service_slug, services);
                         const msg = WA_TEMPLATES.appointment_confirmed(
                           booking.customer_name,

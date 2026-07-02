@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { STATES } from "@/lib/constants/index";
 import { insertBooking } from "@/lib/supabase/queries/bookings";
-import { addLocalBooking } from "@/lib/local-bookings";
 import { mapServices } from "@/lib/map-service";
 import type { Service } from "@/lib/map-service";
 
@@ -217,7 +216,7 @@ export default function BookingForm({
     };
     const { error: insertError } = await insertBooking(payload);
     if (insertError) {
-      addLocalBooking(payload);
+      setError("Booking failed — please try again or contact us.");
     } else {
       await fetch("/api/send-booking-emails", {
         method: "POST",

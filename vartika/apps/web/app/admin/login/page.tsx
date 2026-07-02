@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -29,9 +29,6 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-[#0C0D0B] flex items-center justify-center px-5">
       <div className="w-full max-w-[400px]">
         <div className="text-center mb-10">
-          {/* <div className="flex items-center justify-center gap-2 mb-4">
-            <img src="/logo-horizontal.svg" alt="" />
-          </div> */}
           <h1 className="text-xl font-semibold text-white/85">Admin Login</h1>
           <p className="text-sm text-white/35 mt-2">
             Sign in to manage your Vartika dashboard
@@ -74,17 +71,6 @@ export default function AdminLoginPage() {
             className="w-full h-12 bg-accent text-white rounded-full text-sm font-semibold hover:bg-accent2 transition-all cursor-pointer"
           >
             Sign In
-          </button>
-
-          <button
-            type="button"
-            onClick={async () => {
-              await fetch("/api/dev-login");
-              router.push("/admin/dashboard");
-            }}
-            className="w-full h-12 mt-3 border border-white/10 text-white/50 rounded-full text-sm font-medium hover:text-white hover:border-white/30 transition-all cursor-pointer"
-          >
-            Demo Login (Dev Only)
           </button>
         </form>
       </div>

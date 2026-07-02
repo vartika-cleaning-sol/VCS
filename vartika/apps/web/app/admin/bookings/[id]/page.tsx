@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getLocalBookings, updateLocalBooking } from "@/lib/local-bookings";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { WA_TEMPLATES } from "@/lib/constants/messages";
 
@@ -83,24 +82,16 @@ export default function BookingDetailPage() {
           setServices(svcRows.map((s: { slug: string; name: string }) => ({ slug: s.slug, name: s.name })));
           if (bookingRes.data) {
             setBooking(bookingRes.data);
-          } else {
-            const local = getLocalBookings();
-            const found = local.find((b) => b.id === params.id);
-            if (found) setBooking(found);
           }
           setLoading(false);
         })
         .catch(() => {
-          const local = getLocalBookings();
-          const found = local.find((b) => b.id === params.id);
-          if (found) setBooking(found);
           setLoading(false);
         });
     }
   }, [params.id]);
 
   const updateStatus = async (id: string, status: string) => {
-    updateLocalBooking(id, { status });
     const res = await fetch("/api/bookings", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -109,8 +100,6 @@ export default function BookingDetailPage() {
     const json = await res.json();
     if (json.data) {
       setBooking((prev) => prev ? { ...prev, status: json.data.status } : prev);
-    } else {
-      setBooking((prev) => prev ? { ...prev, status } : prev);
     }
   };
 
