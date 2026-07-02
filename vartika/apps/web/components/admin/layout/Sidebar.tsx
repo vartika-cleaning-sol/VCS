@@ -73,6 +73,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       .catch(() => setPendingCount(0));
   }, []);
 
+  useEffect(() => {
+    if (pathname === "/admin/login") return;
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) router.push("/admin/login");
+    });
+  }, [pathname, router]);
+
   const handleSearch = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchQuery.trim()) {
       router.push(`/admin/bookings?q=${encodeURIComponent(searchQuery.trim())}`);
@@ -81,7 +89,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const handleLogout = async () => {
     const supabase = createClient();
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, `=;max-age=0;path=/`);
+      });
+    }
     router.push("/admin/login");
   };
 

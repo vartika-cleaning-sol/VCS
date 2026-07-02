@@ -106,7 +106,7 @@ export default function AdminDashboardPage() {
             key={stat.label}
             className="bg-[#161714] border border-white/6 rounded-12 p-[22px] relative"
           >
-            <div className="font-mono text-[32px] text-white font-medium mb-1 leading-none">
+            <div className="font-mono max-md:text-xl text-[32px] text-white font-medium mb-1 leading-none truncate">
               {stat.val}
             </div>
             <div className="text-xs text-white/35 uppercase tracking-wide mb-2">

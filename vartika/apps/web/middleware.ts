@@ -1,4 +1,7 @@
+import { createServerClient, DEFAULT_COOKIE_OPTIONS } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+
+DEFAULT_COOKIE_OPTIONS.maxAge = undefined;
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -21,7 +24,54 @@ export async function middleware(request: NextRequest) {
 
   if (request.method !== "GET") return NextResponse.next();
   if (pathname.startsWith("/_next") || pathname.startsWith("/api")) return NextResponse.next();
-  if (pathname.startsWith("/admin")) return NextResponse.next();
+
+  if (pathname.startsWith("/admin")) {
+    if (!SUPABASE_URL || !ANON_KEY) {
+      if (pathname !== "/admin/login") {
+        return NextResponse.redirect(new URL("/admin/login", request.url));
+      }
+      return NextResponse.next();
+    }
+
+    let supabaseResponse = NextResponse.next({ request });
+
+    const supabase = createServerClient(SUPABASE_URL, ANON_KEY, {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+          supabaseResponse = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          );
+        },
+      },
+    });
+
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (pathname === "/admin/login" && user) {
+        return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+      }
+
+      if (pathname !== "/admin/login" && !user) {
+        return NextResponse.redirect(new URL("/admin/login", request.url));
+      }
+
+      return supabaseResponse;
+    } catch {
+      if (pathname !== "/admin/login") {
+        return NextResponse.redirect(new URL("/admin/login", request.url));
+      }
+      return NextResponse.next();
+    }
+  }
+
   if (pathname === "/" || pathname === "") return NextResponse.next();
 
   const segments = pathname.split("/").filter(Boolean);

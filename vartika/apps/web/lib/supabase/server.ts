@@ -1,5 +1,7 @@
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient, DEFAULT_COOKIE_OPTIONS } from "@supabase/ssr";
 import { cookies } from "next/headers";
+
+DEFAULT_COOKIE_OPTIONS.maxAge = undefined;
 
 export async function createServerSupabase() {
   const cookieStore = await cookies();
