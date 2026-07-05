@@ -20,7 +20,8 @@ interface ServiceRow {
   duration_hrs: string | null;
   icon: string | null;
   image_url: string | null;
-  base_price: number | null;
+  min_price: number | null;
+  max_price: number | null;
   pricing_unit: string | null;
   pricing_model: string | null;
   is_active: boolean;
@@ -37,7 +38,8 @@ const emptyForm = {
   duration_hrs: "",
   icon: "",
   image_url: "",
-  base_price: 0,
+  min_price: 0,
+  max_price: 0,
   pricing_unit: "sq.ft",
   pricing_model: "per_sqft",
   sort_order: 0,
@@ -87,7 +89,8 @@ export default function AdminServicesPage() {
       duration_hrs: svc.duration_hrs || "",
       icon: svc.icon || "",
       image_url: svc.image_url || "",
-      base_price: svc.base_price ?? 0,
+      min_price: svc.min_price ?? 0,
+      max_price: svc.max_price ?? 0,
       pricing_unit: svc.pricing_unit || "sq.ft",
       pricing_model: svc.pricing_model || "per_sqft",
       sort_order: svc.sort_order || 0,
@@ -156,7 +159,8 @@ export default function AdminServicesPage() {
       duration_hrs: form.duration_hrs || null,
       icon: form.icon || null,
       image_url: form.image_url || null,
-      base_price: form.base_price,
+      min_price: form.min_price,
+      max_price: form.max_price,
       pricing_unit: form.pricing_unit,
       pricing_model: form.pricing_model,
       sort_order: form.sort_order,
@@ -236,11 +240,11 @@ export default function AdminServicesPage() {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-black/20 border-b border-white/4">
-                {["Name", "Slug", "Duration", "Sort", "Actions"].map((h) => (
+                {["Name", "Slug", "Duration", "Price Range", "Sort", "Actions"].map((h) => (
                   <th
                     key={h}
                     className={`text-[10px] tracking-widest uppercase text-white/25 px-5 py-2.5 text-left whitespace-nowrap ${
-                      h === "Slug" || h === "Sort" ? "max-md:hidden" : ""
+                      h === "Slug" || h === "Sort" || h === "Price Range" ? "max-md:hidden" : ""
                     }`}
                   >
                     {h}
@@ -278,6 +282,13 @@ export default function AdminServicesPage() {
                     {svc.slug}
                   </td>
                   <td className="text-xs text-white/50">{svc.duration_hrs || "—"}</td>
+                  <td className="text-xs text-white/50 max-md:hidden">
+                    {svc.min_price != null && svc.max_price != null
+                      ? svc.min_price === svc.max_price
+                        ? `₹${svc.min_price}`
+                        : `₹${svc.min_price} – ₹${svc.max_price}`
+                      : "—"}
+                  </td>
                   <td className="text-xs text-white/50 max-md:hidden">{svc.sort_order ?? "—"}</td>
                   <td className="px-5 whitespace-nowrap">
                     <div className="flex gap-1">
@@ -458,14 +469,26 @@ export default function AdminServicesPage() {
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <label className="text-[10px] tracking-widest uppercase text-white/25 mb-1 block">
-                    Base Price
+                    Min Price
                   </label>
                   <input
                     type="number"
                     className="w-full bg-black/20 border border-white/6 rounded-8 px-3 py-2 text-sm text-white/70 outline-none focus:border-accent2/40"
-                    value={form.base_price}
-                    onChange={(e) => updateForm("base_price", parseInt(e.target.value) || 0)}
-                    placeholder="180"
+                    value={form.min_price}
+                    onChange={(e) => updateForm("min_price", parseInt(e.target.value) || 0)}
+                    placeholder="5"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] tracking-widest uppercase text-white/25 mb-1 block">
+                    Max Price
+                  </label>
+                  <input
+                    type="number"
+                    className="w-full bg-black/20 border border-white/6 rounded-8 px-3 py-2 text-sm text-white/70 outline-none focus:border-accent2/40"
+                    value={form.max_price}
+                    onChange={(e) => updateForm("max_price", parseInt(e.target.value) || 0)}
+                    placeholder="120"
                   />
                 </div>
                 <div>

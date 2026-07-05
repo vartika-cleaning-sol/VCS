@@ -2,7 +2,8 @@ export interface Service {
   slug: string;
   name: string;
   icon: string;
-  basePrice: number;
+  minPrice: number;
+  maxPrice: number;
   pricingUnit: string;
   pricingModel: "per_sqft" | "per_unit";
   tagline: string;
@@ -19,7 +20,8 @@ export const SERVICES: Service[] = [
     slug: "marbel-diamond-polishing",
     name: "Marble Diamond Polishing",
     icon: "💎",
-    basePrice: 180,
+    minPrice: 180,
+    maxPrice: 180,
     pricingUnit: "sq.ft",
     pricingModel: "per_sqft",
     tagline: "Restore the natural lustre of marble floors",
@@ -51,7 +53,8 @@ export const SERVICES: Service[] = [
     slug: "facade-cleaning",
     name: "Facade Cleaning",
     icon: "🏛️",
-    basePrice: 120,
+    minPrice: 120,
+    maxPrice: 120,
     pricingUnit: "sq.ft",
     pricingModel: "per_sqft",
     tagline: "Restore your building's exterior glory",
@@ -83,7 +86,8 @@ export const SERVICES: Service[] = [
     slug: "wooden-floor-polishing",
     name: "Wooden Floor Polishing",
     icon: "🪵",
-    basePrice: 160,
+    minPrice: 160,
+    maxPrice: 160,
     pricingUnit: "sq.ft",
     pricingModel: "per_sqft",
     tagline: "Bring warmth and shine back to your wooden floors",
@@ -116,7 +120,8 @@ export const SERVICES: Service[] = [
     slug: "sofa-deep-cleaning",
     name: "Sofa Deep Cleaning",
     icon: "🛋",
-    basePrice: 499,
+    minPrice: 499,
+    maxPrice: 499,
     pricingUnit: "seat",
     pricingModel: "per_unit",
     tagline: "Deep clean upholstery that feels and looks like new",
@@ -150,7 +155,8 @@ export const SERVICES: Service[] = [
     slug: "carpet-cleaning",
     name: "Carpet Cleaning",
     icon: "🧹",
-    basePrice: 150,
+    minPrice: 150,
+    maxPrice: 150,
     pricingUnit: "sq.ft",
     pricingModel: "per_sqft",
     tagline: "Remove deep stains and revive your carpets",

@@ -3,7 +3,8 @@ export interface Service {
   slug: string;
   name: string;
   icon: string;
-  basePrice: number;
+  minPrice: number;
+  maxPrice: number;
   pricingUnit: string;
   pricingModel: "per_sqft" | "per_unit";
   tagline: string;
@@ -26,7 +27,8 @@ export interface ServiceRow {
   duration_hrs: string | null;
   icon: string | null;
   image_url: string | null;
-  base_price: number | null;
+  min_price: number | null;
+  max_price: number | null;
   pricing_unit: string | null;
   pricing_model: string | null;
   is_active: boolean;
@@ -39,7 +41,8 @@ export function mapService(row: ServiceRow): Service {
     slug: row.slug,
     name: row.name,
     icon: row.icon || "📦",
-    basePrice: row.base_price || 0,
+    minPrice: row.min_price || 0,
+    maxPrice: row.max_price || 0,
     pricingUnit: row.pricing_unit || "sq.ft",
     pricingModel: (row.pricing_model as "per_sqft" | "per_unit") || "per_sqft",
     tagline: row.tagline || "",

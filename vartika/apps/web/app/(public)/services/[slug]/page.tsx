@@ -58,9 +58,9 @@ export default async function ServicePage({
   }
 
   const priceLabel =
-    service.pricingModel === "per_sqft"
-      ? `₹${service.basePrice}/${service.pricingUnit}`
-      : `₹${service.basePrice}/${service.pricingUnit}`;
+    service.minPrice === service.maxPrice
+      ? `₹${service.minPrice}/${service.pricingUnit}`
+      : `₹${service.minPrice}–${service.maxPrice}/${service.pricingUnit}`;
 
   return (
     <>

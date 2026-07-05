@@ -18,9 +18,9 @@ export default function ServiceDetailModal({
   if (!service) return null;
 
   const priceLabel =
-    service.pricingModel === "per_sqft"
-      ? `₹${service.basePrice}/${service.pricingUnit}`
-      : `₹${service.basePrice}/${service.pricingUnit}`;
+    service.minPrice === service.maxPrice
+      ? `₹${service.minPrice}/${service.pricingUnit}`
+      : `₹${service.minPrice}–${service.maxPrice}/${service.pricingUnit}`;
 
   return (
     <Modal open={open} onClose={onClose}>

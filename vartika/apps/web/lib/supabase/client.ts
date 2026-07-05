@@ -1,6 +1,4 @@
-import { createBrowserClient, DEFAULT_COOKIE_OPTIONS } from "@supabase/ssr";
-
-DEFAULT_COOKIE_OPTIONS.maxAge = undefined;
+import { createBrowserClient } from "@supabase/ssr";
 
 export function createClient() {
   return createBrowserClient(

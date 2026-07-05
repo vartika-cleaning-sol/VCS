@@ -1,0 +1,3 @@
+ALTER TABLE services ADD COLUMN min_price INTEGER DEFAULT 0;
+ALTER TABLE services ADD COLUMN max_price INTEGER DEFAULT 0;
+ALTER TABLE services DROP COLUMN base_price;

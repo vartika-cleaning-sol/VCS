@@ -1,9 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import ServiceCard from "@/components/public/shared/ServiceCard";
 import { mapServices } from "@/lib/map-service";
 import type { Service } from "@/lib/map-service";
+
+function chunkArray<T>(arr: T[], size: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    chunks.push(arr.slice(i, i + size));
+  }
+  return chunks;
+}
 
 export default function ServicesGrid() {
   const [services, setServices] = useState<Service[]>([]);
@@ -14,6 +22,8 @@ export default function ServicesGrid() {
       .then((rows) => setServices(mapServices(rows)))
       .catch(() => {});
   }, []);
+
+  const groups = useMemo(() => chunkArray(services, 5), [services]);
 
   return (
     <section
@@ -26,11 +36,9 @@ export default function ServicesGrid() {
         backgroundAttachment: "fixed",
       }}
     >
-      {/* Overlay for contrast */}
       <div className="absolute inset-0" />
 
       <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="font-serif text-4xl md:text-5xl font-bold text-white mb-4">
             Our Premium Services
@@ -41,45 +49,43 @@ export default function ServicesGrid() {
           </p>
         </div>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.slice(0, 3).map((service, index) => (
-            <div
-              key={service.slug}
-              className="animate-slide-up"
-              style={{ animationDelay: `${index * 150}ms` }}
-            >
-              <ServiceCard
-                service={service}
-                onSelect={() => {}}
-              />
-            </div>
-          ))}
-        </div>
+        {groups.map((group, groupIndex) => {
+          const baseIndex = groupIndex * 5;
+          return (
+            <div key={groupIndex} className={groupIndex > 0 ? "mt-6" : ""}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {group.slice(0, 3).map((service, i) => (
+                  <div
+                    key={service.slug}
+                    className="animate-slide-up"
+                    style={{ animationDelay: `${(baseIndex + i) * 150}ms` }}
+                  >
+                    <ServiceCard service={service} onSelect={() => {}} />
+                  </div>
+                ))}
+              </div>
 
-        {/* Second row - Large card + regular card */}
-        {services.length > 3 && (
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-6">
-            <div
-              className="lg:col-span-3 animate-slide-up"
-              style={{ animationDelay: "450ms" }}
-            >
-              <ServiceCard
-                service={services[3]}
-                onSelect={() => {}}
-              />
+              {group.length > 3 && (
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-6">
+                  <div
+                    className="lg:col-span-3 animate-slide-up"
+                    style={{ animationDelay: `${(baseIndex + 3) * 150}ms` }}
+                  >
+                    <ServiceCard service={group[3]} onSelect={() => {}} />
+                  </div>
+                  {group.length > 4 && (
+                    <div
+                      className="lg:col-span-2 animate-slide-up"
+                      style={{ animationDelay: `${(baseIndex + 4) * 150}ms` }}
+                    >
+                      <ServiceCard service={group[4]} onSelect={() => {}} />
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-            <div
-              className="lg:col-span-2 animate-slide-up"
-              style={{ animationDelay: "600ms" }}
-            >
-              <ServiceCard
-                service={services[4]}
-                onSelect={() => {}}
-              />
-            </div>
-          </div>
-        )}
+          );
+        })}
       </div>
 
       <style jsx>{`

@@ -12,7 +12,7 @@ export default function Footer() {
         {/* Brand */}
         <div>
           <div className="flex items-center pt-5 pb-0 mb-0 gap-3">
-            <img src="/newlogogreen.svg" alt="Vartika" className="h-[100px] w-auto object-contain" />
+            <img src="/newlogogreen.svg" alt="Vartika" className="h-[100px] mb-2 w-auto object-contain" />
           </div>
           <p className="text-sm text-white/40 leading-relaxed mt-0 max-w-[260px] mb-2">
             Transforming spaces with precision, care, and the highest standards

@@ -99,9 +99,9 @@ export default function BookingForm({
   }, [initialService, services]);
 
   function priceLabel(svc: Service) {
-    return svc.pricingModel === "per_sqft"
-      ? `₹${svc.basePrice}/${svc.pricingUnit}`
-      : `₹${svc.basePrice}/${svc.pricingUnit}`;
+    return svc.minPrice === svc.maxPrice
+      ? `₹${svc.minPrice}/${svc.pricingUnit}`
+      : `₹${svc.minPrice}–${svc.maxPrice}/${svc.pricingUnit}`;
   }
 
   const today = new Date().toISOString().split("T")[0];
@@ -110,15 +110,15 @@ export default function BookingForm({
     svc: Service | undefined,
     propertySize: string,
     szUnit: "sq.ft" | "sq.m"
-  ): number | null {
+  ): { min: number; max: number } | null {
     if (!svc || !propertySize) return null;
     const size = Number(propertySize);
     if (size <= 0) return null;
     if (svc.pricingModel === "per_sqft") {
       const sqft = szUnit === "sq.m" ? size * 10.764 : size;
-      return svc.basePrice * sqft;
+      return { min: svc.minPrice * sqft, max: svc.maxPrice * sqft };
     }
-    return svc.basePrice * size;
+    return { min: svc.minPrice * size, max: svc.maxPrice * size };
   }
 
   function formatINR(n: number): string {
@@ -653,8 +653,12 @@ export default function BookingForm({
                 </div>
                 {total !== null && (
                   <div className="flex justify-between py-2.5 border-t border-bd text-sm font-semibold">
-                    <span className="text-ink3">Total</span>
-                    <span className="text-accent font-mono">{formatINR(total)}</span>
+                    <span className="text-ink3">Estimate</span>
+                    <span className="text-accent font-mono">
+                      {total.min === total.max
+                        ? formatINR(total.min)
+                        : `${formatINR(total.min)} – ${formatINR(total.max)}`}
+                    </span>
                   </div>
                 )}
               </div>
@@ -720,10 +724,19 @@ export default function BookingForm({
               Estimate
             </span>
             <span className="font-mono text-xl text-accent font-medium">
-              {total !== null ? formatINR(total) : form.servicePrice}
+              {total !== null
+                ? total.min === total.max
+                  ? formatINR(total.min)
+                  : `${formatINR(total.min)} – ${formatINR(total.max)}`
+                : form.servicePrice}
             </span>
           </div>
-          {total !== null && (
+          {total !== null && total.min === total.max && (
+            <div className="text-[11px] text-ink4 mt-1 text-right">
+              ₹{total.min.toLocaleString("en-IN")} × {form.propertySize} {propertyUnit}
+            </div>
+          )}
+          {total !== null && total.min !== total.max && (
             <div className="text-[11px] text-ink4 mt-1 text-right">
               {form.servicePrice} × {form.propertySize} {propertyUnit}
             </div>

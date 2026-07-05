@@ -61,7 +61,7 @@ export default function AdminDashboardPage() {
     (services || []).map((s) => [s.slug, s.name])
   );
   const priceMap = new Map(
-    (services || []).map((s) => [s.slug, { basePrice: s.base_price || 0, model: s.pricing_model || "per_sqft" }])
+    (services || []).map((s) => [s.slug, { minPrice: s.min_price || 0, model: s.pricing_model || "per_sqft" }])
   );
   const total = bookings?.length || 0;
   const pendingCount = bookings?.filter((b) => b.status === "new").length || 0;
@@ -73,7 +73,7 @@ export default function AdminDashboardPage() {
     .reduce((sum, b) => {
       const pricing = priceMap.get(b.service_slug);
       if (!pricing) return sum;
-      return sum + (pricing.basePrice * (b.area_sqft || 0));
+      return sum + (pricing.minPrice * (b.area_sqft || 0));
     }, 0);
 
   const recent = bookings?.slice(0, 5) || [];
